@@ -23,6 +23,7 @@ Worker ──(secret + access token)──▶ Apps Script ──▶ ssl.bing.com
 1. Create a project at [script.google.com](https://script.google.com) and paste [`relay/Code.gs`](relay/Code.gs).
 2. Run `setup` once. The log should show `InvalidApiKey` (good), not `ThrottleIP`.
 3. **Deploy → New deployment → Web app**, execute as *Me*, access *Anyone*. Keep the `/exec` URL.
+   On a Google Workspace account an admin policy may hide *Anyone* and offer only *Anyone within your domain*; the Worker's requests then land on a sign-in page (`HTTP 200: <html>…`). Deploy from a personal Gmail account, or ask the admin to allow it.
 4. Copy `RELAY_SECRET` from **Project Settings → Script Properties** into your Worker as a secret.
 5. Call Bing with [`client/bing-fetch.ts`](client/bing-fetch.ts).
 

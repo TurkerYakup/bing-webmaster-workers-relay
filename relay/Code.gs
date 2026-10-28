@@ -48,7 +48,14 @@ function doPost(e) {
     options.payload = JSON.stringify(req.body || {});
   }
 
-  const res = UrlFetchApp.fetch(BING_API + req.method + (query ? '?' + query : ''), options);
+  // muteHttpExceptions only covers HTTP errors. Timeouts, DNS failures and quota errors still
+  // throw, and an uncaught throw makes Google answer with an HTML page instead of JSON.
+  let res;
+  try {
+    res = UrlFetchApp.fetch(BING_API + req.method + (query ? '?' + query : ''), options);
+  } catch (err) {
+    return refuse('fetch failed: ' + String((err && err.message) || err).slice(0, 200));
+  }
   return reply(res.getResponseCode(), res.getContentText());
 }
 
